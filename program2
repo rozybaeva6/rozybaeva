@@ -1,0 +1,59 @@
+#include  <iostream>
+#include <fstream>
+#include <string>
+
+
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+	if (argc != 3)  //проверяем на правильное кол-во аргументов программы, если неверное, то выводим ошибку и завершаемся
+	{
+		cout << "arguments error!" << endl;
+		return 0;
+	}
+	string wayIn;  //путь до файла исходного
+	string wayOut;  //путь до файла конечного
+	int n1, n2;
+	wayIn = string(argv[1]);    //запись путей в локальные переменные
+	wayOut = string(argv[2]);
+	string str1, str2, res;
+	ifstream in(wayIn);  //открытие файла для чтения
+	if (!in.is_open())  //проверка на существование файла для чтения
+	{
+		cout << "input file error!" << endl;   //если файл не открылся, программа завершается
+		return 0;
+	}
+	getline(in, str1);  //считывание исходных строк из файла
+	cout << "First string: " << str1 << endl;
+	getline(in, str2);
+	cout << "Second string: " << str2 << endl;
+	in.close();  //закрытие файла для чтения
+	cout << "input N1: ";  //получение n1
+	cin >> n1;
+	if (n1 > str1.length())  //если число берущихся символов из первой строки больше длины этой строки
+	{
+		cout << "N1 is too big!" << endl;  //сообщаем пользователю, что операция невозможна и выходим из программы
+		return 0;
+	}
+	cout << "input N2: ";   //получение n2 
+	cin >> n2;
+	if (n2 > str2.length())   //если число берущихся символов из второй строки больше длины этой строки
+	{
+		cout << "N2 is too big!" << endl;   //сообщаем пользователю, что операция невозможна и выходим из программы
+		return 0;
+	}
+	for (int i = 0; i < n1; i++)  //проходим по первым n1 символам первой строки
+		res.push_back(str1[i]);  //и вставляем каждый символ в итоговую строку
+	res.append(&(str2[str2.length() - n2 - 1]), sizeof(str2[0]), n2);  //присоединяем к итоговой строке последние n2 символов из второй строки. 
+	ofstream out(wayOut);   //открытие файла для записи
+	if (!out.is_open())    //проверка открытия файла для записи
+	{
+		cout << "output file error!" << endl;  //если файл не открылся, программа завершается
+		return 0;
+	}
+	out << res;   //вывод результатов в файл для записи
+	out.close();  //закрытие файла для записи
+	cout << "Result: " << res << endl;
+	return 0;
+}
